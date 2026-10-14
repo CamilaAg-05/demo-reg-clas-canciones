@@ -25,7 +25,7 @@ from src.variables import (
     resumen_periodo,
 )
 
-NOMBRE = "lineal + duración²"
+NOMBRE = "lineal + duración² + género×(baila, energía, año, colab)"
 CORTE_PROMOCION = 65  # popularidad esperada a partir de la cual se recomienda promocionar
 VARIABLES_EXCLUIDAS = {
     "reproducciones_sem1": "ocurre después del lanzamiento: no existe en el momento de decidir",

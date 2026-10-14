@@ -49,18 +49,24 @@ FILA_EJEMPLO = {
     "colaboracion": 1,
     "genero": "urbano",
 }
+VARIABLES_GENERO = ["bailabilidad", "energia", "anio", "colaboracion"]
+COLUMNAS_GENERO = [f"{v}_{g}" for g in GENEROS for v in VARIABLES_GENERO]
 
 
 def derivadas(X: pd.DataFrame) -> pd.DataFrame:
     """Agrega las variables derivadas. Se calculan fila a fila, sin aprender de otros registros."""
     X = X.copy()
     X["duracion_c2"] = (X["duracion_min"] - 3.5) ** 2
+    for g in GENEROS:
+        es_g = (X["genero"] == g).astype(float)
+        for v in VARIABLES_GENERO:
+            X[f"{v}_{g}"] = X[v] * es_g
     return X
 
 
 def preprocesamiento() -> ColumnTransformer:
     """Codificación de género y escalado de las numéricas, aplicado después de `derivadas`."""
-    numericas = [c for c in COLUMNAS_ENTRADA if c not in CATEGORICAS] + ["duracion_c2"]
+    numericas = [c for c in COLUMNAS_ENTRADA if c not in CATEGORICAS] + ["duracion_c2"] + COLUMNAS_GENERO
     return ColumnTransformer(
         [
             ("cat", OneHotEncoder(handle_unknown="ignore", sparse_output=False), CATEGORICAS),
